@@ -4,6 +4,7 @@
 #ifndef _BSD_SOURCE
 # define _BSD_SOURCE
 #endif
+#define _DEFAULT_SOURCE
 
 #if defined(__linux__) || defined(__OpenBSD__) || defined(_AIX)
 #ifndef _XOPEN_SOURCE
@@ -22,7 +23,13 @@
 # define _LARGEFILE_SOURCE
 #endif
 
+#ifndef _LARGEFILE_SOURCE
+#define _LARGEFILE_SOURCE
+#endif
+
 #undef _FILE_OFFSET_BITS
+#ifndef _FILE_OFFSET_BITS
 #define _FILE_OFFSET_BITS 64
+#endif
 
 #endif

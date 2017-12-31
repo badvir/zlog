@@ -41,7 +41,7 @@ endif
 
 # Fallback to gcc when $CC is not in $PATH.
 CC:=$(shell sh -c 'type $(CC) >/dev/null 2>/dev/null && echo $(CC) || echo gcc')
-OPTIMIZATION=-O0
+OPTIMIZATION?=-O2
 
 ifeq ($(UNAME), MINGW)
 #XXX: ignore warnings on mingw for now
@@ -50,7 +50,7 @@ else
 WARNINGS=-Wall -Werror -Wstrict-prototypes -fwrapv
 endif
 
-DEBUG= -g -ggdb
+DEBUG?= -g -ggdb
 REAL_CFLAGS=$(OPTIMIZATION) -fPIC -pthread $(CFLAGS) $(WARNINGS) $(DEBUG)
 REAL_LDFLAGS=$(LDFLAGS) -pthread
 
@@ -67,14 +67,11 @@ STLIB_MAKE_CMD=ar rcs $(STLIBNAME)
 PREFIX?=/usr/local
 INCLUDE_PATH?=include
 LIBRARY_PATH?=lib
-
-UNAME_SHORT := $(shell sh -c 'uname -s 2>/dev/null | cut -c -5')
-ifeq ($(uname_S),Mingw)
-LIBRARY_PATH := bin
-endif
+BINARY_PATH=bin
 
 INSTALL_INCLUDE_PATH= $(PREFIX)/$(INCLUDE_PATH)
 INSTALL_LIBRARY_PATH= $(PREFIX)/$(LIBRARY_PATH)
+INSTALL_BINARY_PATH=  $(PREFIX)/$(BINARY_PATH)
 
 # Platform-specific overrides
 uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
@@ -200,8 +197,9 @@ endif
 INSTALL?= cp -a
 
 install: $(DYLIBNAME) $(STLIBNAME)
-	mkdir -p $(INSTALL_INCLUDE_PATH) $(INSTALL_LIBRARY_PATH)
+	mkdir -p $(INSTALL_INCLUDE_PATH) $(INSTALL_LIBRARY_PATH) $(INSTALL_BINARY_PATH)
 	$(INSTALL) zlog.h $(INSTALL_INCLUDE_PATH)
+	$(INSTALL) zlog-chk-conf $(INSTALL_BINARY_PATH)
 	$(INSTALL) $(DYLIBNAME) $(INSTALL_LIBRARY_PATH)/$(DYLIB_MINOR_NAME)
 	cd $(INSTALL_LIBRARY_PATH) && ln -sf $(DYLIB_MINOR_NAME) $(DYLIB_MAJOR_NAME)
 	cd $(INSTALL_LIBRARY_PATH) && ln -sf $(DYLIB_MAJOR_NAME) $(DYLIBNAME)
