@@ -1,38 +1,50 @@
 Name:           zlog
-Version:        1.2.8
+Version:        1.2.12
 Release:        1
 Summary:        zlog logger framework
 
 License:        LGPL
 URL:            http://hardysimpson.github.io/zlog/
+Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  gcc make
 
-%define _builddir %(echo $PWD)
+%define package_name    %{name}-%{version}
+
 
 %description
 AIRTAME Web Service is powering the setup page.
 
-%build
 
-make clean all 
+%prep
+#cp -a %_sourcedir/%{package_name}.tar.gz %_builddir/
+#cd %_builddir
+#tar xvf %{package_name}.tar.gz
+#rm %{package_name}.tar.gz
+
+%setup -q
+
+
+%build
+#cd %{package_name}
+./make
 
 %install
 install -d '%{buildroot}/usr/include'
-install -d '%{buildroot}/usr/lib'
+install -d '%{buildroot}/usr/lib64'
+pwd=$(pwd)
+echo "aapwd=$pwd"
 cp src/zlog.h '%{buildroot}/usr/include/zlog.h'
-cp src/libzlog.a '%{buildroot}/usr/lib/libzlog.a'
-cp src/libzlog.so.1.2 '%{buildroot}/usr/lib/libzlog.so.1.2'
-ln -sf /usr/lib/libzlog.so.1.2 '%{buildroot}/usr/lib/libzlog.so.1'
-ln -sf /usr/lib/libzlog.so.1.2 '%{buildroot}/usr/lib/libzlog.so'
+cp build/Linux/lib/libzlog.a '%{buildroot}/usr/lib64/libzlog.a'
+cp build/Linux/lib/libzlog.so.1.2.12 '%{buildroot}/usr/lib64/libzlog.so.1.2'
+ln -sf /usr/lib64/libzlog.so.1.2 '%{buildroot}/usr/lib64/libzlog.so.1'
+ln -sf /usr/lib64/libzlog.so.1.2 '%{buildroot}/usr/lib64/libzlog.so'
 
 %clean
 
 %files
 /usr/include/zlog.h
-/usr/lib/libzlog.a
-/usr/lib/libzlog.so
-/usr/lib/libzlog.so.1
-/usr/lib/libzlog.so.1.2
-
-
+/usr/lib64/libzlog.a
+/usr/lib64/libzlog.so
+/usr/lib64/libzlog.so.1
+/usr/lib64/libzlog.so.1.2
