@@ -32,8 +32,6 @@ AIRTAME Web Service is powering the setup page.
 %install
 install -d '%{buildroot}/usr/include'
 install -d '%{buildroot}/usr/lib64'
-pwd=$(pwd)
-echo "aapwd=$pwd"
 cp src/zlog.h '%{buildroot}/usr/include/zlog.h'
 cp build/Linux/lib/libzlog.a '%{buildroot}/usr/lib64/libzlog.a'
 cp build/Linux/lib/libzlog.so.1.2.12 '%{buildroot}/usr/lib64/libzlog.so.1.2'
